@@ -21,6 +21,8 @@
 \usepackage{multirow}
 \usepackage{rotating}
 
+\graphicspath{{Figures/}}
+
 \makeatletter
 \newfloat{algorithm}{H}{loa}[section]
 \floatname{algorithm}{Algorithm}
@@ -45,18 +47,17 @@
 % 4. University of California, Berkeley, CA, USA,
 % 5. https://github.com/nipy/nipy/contributors
 
-\author[Garyfallidis, Brett, Amirbekian, Rokem,  van der Walt, Descoteaux, 
-Nimmo-Smith]{Eleftherios~Garyfallidis\,$^{1,2,*}$, Matthew~Brett\,$^{3}$,
-  Bago~Amirbekian\,$^{4}$, Ariel~Rokem\,$^{5}$, Stefan~van der Walt\,$^{7}$, Maxime~Descoteaux\,$^{2}$, Ian~Nimmo-Smith\,$^{6}$ \footnote{to whom correspondence should be addressed. e-mail: garyfallidis@gmail.com}}
+\author[Roche,Thirion,Varoquaux,Taylor,Brett]{Alexis~Roche\,$^{1,2}$,
+  Bertrand~Thirion\,$^{3}$, Ga\"el~Varoquaux\,$^{3}$,
+  Jonathan~Taylor\,$^{4}$, Matthew~Brett\,$^{5} \footnote{to whom
+    correspondence should be addressed. e-mail:
+    matthew.brett@gmail.com}$, and NIPY contributors}
 
-\address{\,$^{1}$University of Cambridge, Cambridge, UK\\
-  \,$^{2}$University of Sherbrooke, Sherbrooke, CA\\ 
-  \,$^{3}$University of California, Henry H. Wheeler, Jr. Brain Imaging Center, Berkeley, CA.\\
-  \,$^{4}$University of California, San Francisco, CA, USA\\    
-  \,$^{5}$Stanford University, Stanford, CA, USA\\
-  \,$^{6}$MRC Cognition and Brain Sciences Unit, Cambridge, UK\\
-  \,$^{7}$Stellenbosch University, Stellenbosch, South Africa\\  
-  }
+\address{\,$^{1}$University Hospital, Lausanne, Switzerland\\
+  \,$^{2}$Siemens Healthcare Sector, Lausanne, Switzerland\\ 
+  \,$^{3}$INRIA, Parietal team, Neurospin, Saclay, France\\
+  \,$^{4}$Stanford University, Stanford, CA, USA\\
+  \,$^{5}$University of California, Berkeley, CA, USA}
 
 
 \history{}
@@ -76,80 +77,190 @@ well-adapted to the scientific problem, and fast enough to run in reasonable
 time.
 
 Using Python has made it easier for us to work together because of the
-readability of the language, the popularity of the language among open-source
-developers, and Python’s emphasis on testing and documentation.
+readability of the language, the popularity of the language among
+open-source developers, and Python's emphasis on testing and
+documentation.
 
 The package developed from a collaboration between researchers in Stanford,
 Berkeley and CEA Neurospin in France.
 
-Notable features of the NIPY package are:
-
-Scriptable image diagnostics including flexible PCA Combined slice-timing and
-movement correction for functional MRI images Flexible registration model with
-pluggable cost functions and optimization algorithms Common spatial models of
-function encountered in neuroimaging  (cluster-level models, parcellations )
-Fast and flexible specification of regression models within and across
-subjects and groups Visualization of statistical brain maps in 2D and 3D
+Notable features of the NIPY package are: scriptable image diagnostics
+including flexible PCA; combined slice-timing and movement correction
+for functional MRI images; flexible registration model with pluggable
+cost functions and optimization algorithms; common spatial models of
+function encountered in neuroimaging (cluster-level models;
+parcellations); fast and flexible specification of regression models
+within and across subjects and groups; visualization of statistical
+brain maps in 2D and 3D.
 
 We will describe these features of the package with examples of their use.
 
-\section{Keywords:} Python, Diffusion MRI, Diffusion Tensor model,
+\section{Keywords:} Python, functional MRI, structural MRI, 
 Deconvolution, Medical imaging, Open source software, Deterministic
 tractography, Probabilistic tractography, Visualisation.
 
 \end{abstract}
 
-\section{Skeleton}
+\section*{Skeleton}
 
-Here is a possible outline for the paper:
+This section will be removed later on. Let's have it for now to
+clarify the paper outline for every author. Here is a possible
+outline, please feel free to modify:
 
 \begin{verbatim}
-Philosophy/Mission
-General Design Aspects
+Introduction
+  Philosophy/Mission
+  General Design Aspects
 File Formats 
 Preprocessing
-   Eddy currents?
-   Denoising?
-Reconstruction
-   DTI 
-   DSI
-   QBall
-   Spherical Deconvolution 
-Tracking
-   Deterministic
-   Probabilistic
-Post-tracking
-   Segmentation
-   Track_counts
-   Track Lengths & other statistics
-   Connectivity matrix?
+   Image diagnostics
+   Spatiotemporal realignment
+   Generic image registration
+Statistical analysis
+   GLM specification/estimation
+   Cluster-level analysis
+   Parcel-based Bayesian analysis
+Visualization
 Conclusions
 \end{verbatim}
 
-\section{Philosophy and Mission}
+\section{Introduction}
 
 Someone will write this.
 
-\section{LaTex Formatting Stuff}
+\section{File formats}
+
+\section{Preprocessing}
+
+\subsection{Image diagnostics}
+
+\subsection{Spatiotemporal realignment}
+
+FMRI sequences present spatio-temporal distortion due to the
+combination of head motion during scanning and staggered slice
+acquisition. While most fMRI processing packages provide tools to
+correct for motion and slice timing separately, a common dilemma is to
+determine which correction should be applied first. NIPY proposes a
+four-dimensional realignment algorithm to perform both tasks
+simultaneously \citep{roche:tmi:11}. This approach makes it possible
+to account and correct for {\em continuous} movements that occur
+throughout image acquisition. In addition, the method limits the
+effect of BOLD signal changes on realignment \citep{freire:ni:01} by
+using an adaptive reference image.
+
+Spatiotemporal registration is implemented by a class called {\tt
+  SpaceTimeRealign} which takes as initialization arguments a list of
+four-dimensional images corresponding to successive fMRI runs for a
+particular subject, and image acquisition information (inter-scan
+repetition time, slice acquisition times, acquisition plane). Rigid
+motion estimation is performed within each run as well as between
+runs. Once motion parameters are estimated, it is possible to resample
+each run on a regular four-dimensional lattice, thereby reconstructing
+fMRI runs corrected for motion and slice timing effects. Note that
+this algorithm does not rely on a particular BOLD response model, and
+is therefore applicable, in principle, to both stimulation and resting
+state fMRI.
+
+\subsection{Generic image registration}
+
+NIPY has a generic module ({\tt algorithms.registration}) that
+implements the registration of two three-dimensional images as the
+numerical maximization of a registration measure with respect to a
+spatial transformation set. The module is designed to enable the user
+to customize both the registration measure and the transformation set,
+either by choosing among pre-defined classes or by plugging external
+classes. Built-in registration measures include mutual information
+\citep{maes:tmi:97}, normalized mutual information
+\citep{studholme:pr:98}, standard correlation and correlation ratio
+measures \citep{roche:ijist:00}. Built-in transfromation sets include
+rigid, similarity and 12-parameter affine transformations, and we are
+currently developing diffeomorphic nonrigid transformation classes.
+
+
+
+
+
+\section{Statistical analysis}
+
+\subsection{GLM specification/estimation}
+
+\subsection{Cluster-level analysis}
+
+\subsection{Parcel-based Bayesian analysis}
+
+A weakness of conventional mass-univariate group analysis is that it
+relies on averaging unperfectly aligned multi-subject data, thereby
+mixing signals from potentially different functional
+areas. Cluster-level inference can be used to mitigate this problem,
+but comes at the price of sacrificied localization power. NIPY
+implements an alternative group inference method using a hierarchical
+statistical model that explicititly incorporates spatial uncertainty
+in the standard space, and performs an approximate Bayesian inference
+on group effects assumed to be piecewise constant within the brain
+according to a given, user-supplied parcellation
+\citep{keller:sinica:08,keller:miccai:09}. 
+
+The method is implemented by NIPY's {\tt ParcelAnalysis} class, which
+typically runs in seconds owing to a fast expectation-propagation
+scheme \citep{minka:techrep:05} used to carry out approximate
+inference. An example of use is provided in
+Figure~\ref{fig:parcel_group}, left panel, where we infer the effect
+of changing the speaker for different sentences in an auditory fMRI
+experiment from 15 {\em non-smoothed} first-level contrast images. We
+use the AAL atlas \citep{tzourio:ni:02} as the underlying parcellation
+in this example. The method highlights the inferior temporal gyri and
+the left paracentral lobule as the regions with strongest
+effects. Note that it is possible to switch off the localization
+uncertainty model and replace it with conventional image smoothing, as
+shown in the right panel of Figure~\ref{fig:parcel_group}. We then
+obtain more regions with strong effects, but this likely is an
+artefactual effect of smoothing.
+
+\begin{figure}
+\begin{center}
+  \includegraphics[width=0.23\textwidth]{parcel_group_analysis.png}
+  \includegraphics[width=0.23\textwidth]{parcel_group_analysis_naive.png}
+\end{center}
+\caption{Parcel-based Bayesian estimation of BOLD effects at
+  population level for a speaker effect in an auditory fMRI
+  experiment. Left, using a model of localization uncertainty in MNI
+  space; right, using conventional image smoothing
+  (FWHM=8mm). Brighter colors indicate larger estimated effects.}
+\label{fig:parcel_group}
+\end{figure}
+
+
+
+\section{Visualization}
+
+\section{Conclusion}
+
+
+\section*{Acknowledgments}
+Whom do we need to acknowledge?
+
+\section*{Disclosure/Conflict-of-Interest Statement}
+Is it true that there are no conflicts of interest relating to this
+work?
+
+
+\section*{Formatting stuff}
+
+To be removed later on.
 
 This is to show how graphics (EPS) files are included. We use EPS for
 speed. The first one is spread across both columns, and the second one
 is just in a single column:
 
 \begin{figure*}
-\centerline{\includegraphics[width=160mm]{Figures/Fig_4_cst_simplification_relabeled_triple.eps}}
+%\centerline{\includegraphics[width=160mm]{Figures/Fig_4_cst_simplification_relabeled_triple.eps}}
 \caption{This is the figure caption - and a label to refer to it in the text \label{Fig:big_picture}}
+
 \end{figure*}
 
 When we want to refer to this figure we use the label (see
 Fig.~\ref{Fig:big_picture}).
 
-\begin{figure}
-\includegraphics[scale=0.15]{Figures/Fig_11_MDF_arcuate}
-\centering{}
-\caption{Color coding shows MDF distances from QB centroid to every
-  other track in the bundle.\label{Fig:little_picture}}
-\end{figure}
 
 Here are some displayed equations (see Eq.~\ref{eq:direct_flip_distance}):
 \begin{eqnarray}
@@ -172,24 +283,14 @@ Comparison & Coverage \% (s.d.) & Overlap (s.d.) \\ \hline
 \end{tabular}}{}
 \end{table}
 
-References go like this: in parentheses
-\citep{Garyfallidis_thesis,Mori1999}, and in running text
-\citet{Garyfallidis_thesis}.
 
-\section*{Acknowledgments}
-Who do we need to acknowledge?
-
-\section*{Disclosure/Conflict-of-Interest Statement}
-Is it true that there are no conflicts of interest relating to this
-work?
-
-\selectlanguage{british}%
+%%\selectlanguage{british}%
 \bibliographystyle{apalike2}
 %\bibliographystyle{plainnat}
 %\bibliographystyle{IEEEabrv, IEEEtran}
 %\bibliographystyle{IEEEtran}
 %\bibliographystyle{elsarticle-harv}
 \selectlanguage{english}
-\bibliography{scilBibTex}
+\bibliography{nipy_paper}
 
 \end{document}

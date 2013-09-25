@@ -183,8 +183,70 @@ currently developing diffeomorphic nonrigid transformation classes.
 \section{Statistical analysis}
 
 \subsection{GLM specification/estimation}
+% Bertrand
+% - Design matrix computation: Simplicity of the interface
+% - Idem for GLM
+% - uncoupling GLM / contrasts
+
+FMRI data analysis relies on the modeling of temporal effects that
+represent the expected impact of the experimental events on the brain
+signals, plus a set of confounds.
+%
+Neuroimagers typically have to make a set of choices here: for
+instance, they need to decide which model of the hemodynamic reponse
+function (hrf) they want to use to model evoked response. 
+%
+The hrf is a low-pass filter that delays some input signal --an
+idealized model of neural reponses-- with the observed Blood
+Oxygen-Level Dependent (BOLD) contrast.
+%
+Different parametrization of this filter have been proposed in the
+literature CITE; moreover, it is often advised to include the first
+derivative of the chosen model to account for unpredictable delays in
+the reponse, that can be due to local vasculature differences,
+uncertainty on the exact neural response timing, or shortcomings of
+the slice timing correction.
+%
+Similarly, several different parametrizations can be used to model
+signals of no interest, such as low-frequeny drifts.
+%
+In practice, it is advised to consider different parametrizations of
+the expected responses.
+% 
+In terms of software design, this means that as simple yet flexible
+interface is needed for model specification
+
+%% Provide here a snippet of code and an example
+
+General Linear Model fitting consists then in estimating the brain
+responses associated with the columns of design matrix.
+%
+The fit consists in a weighted least-square fit to estimate the model
+parameters and a variance-covariance matrix parametrized by two
+parameters: the amount of noise variance in the voxel time course and
+the lag-1 autocorrelation of the noise CITE. 
+%
+The model and covariance parameters are estimated in an alternate
+optimization scheme.
+%
+The corresponding interface is relatively simple, as the user simply
+needs to provide the design matrix and the data matrix. 
+%
+It yields a class that contains summary statistics (estimated effects
+and their covariance matrix) that can be used for durther
+investiagtion; the standard way of exploiting this output consists in
+specifying a linear combination of the regressors and test the
+signifiance in signed (t-) or unsigned (F-test)
+%
+
+
+\subsection{Group analysis and statistics}
+
+
 
 \subsection{Cluster-level analysis}
+
+
 
 \subsection{Parcel-based Bayesian analysis}
 
@@ -229,9 +291,11 @@ artefactual effect of smoothing.
 \label{fig:parcel_group}
 \end{figure}
 
-
+\subsection{Brain Functional landmarks}
+% Bertrand
 
 \section{Visualization}
+% Gael or Bertrand
 
 \section{Conclusion}
 

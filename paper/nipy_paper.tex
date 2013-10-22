@@ -244,10 +244,13 @@ See for instance the listing \ref{dmtx} and the result in Fig. \ref{fig:dmtx}
 \lstinputlisting{dmtx.py}
 \end{widetext}
 \begin{figure}
-\includegraphics[width=.9\linewidth]{dmtx.png}
+\begin{center}
+\includegraphics[width=.8\linewidth]{dmtx.png}
+\end{center}
 \caption{ Result of listing 1: the design matrix contains columns that
   contains the ideal reponse to input stimuli and a basis of
   polynomial function to model temporal drifts.}
+\label{fig:dmtx}
 \end{figure}
 
 
@@ -271,11 +274,53 @@ investiagtion; the standard way of exploiting this output consists in
 specifying a linear combination of the regressors and test the
 signifiance in signed (t-) or unsigned (F-test)
 %
+The simplicity of the illustrated in listing \ref{glm}.
 
+\lstset{language=Python, caption={Run of a GLM, based on the
+    previously defined design matrix, on a simulated dataset. The
+    FMRILinearModel object takes images as input and returns a result
+    object, that, when given a certain linear contrast, returns a
+    nibabel.Nifti1Image that yields the z-variate corresponding to the
+    p-value of a positive effect in each voxel of the dataset.},
+  label=glm}
+
+\begin{widetext}
+\lstinputlisting{glm.py}
+\end{widetext}
+
+The z- or equivalently p-variates can then easily be corrected for
+multiple testing using a Bonferroni procedure or a False discovery
+rate correction.
 
 \subsection{Group analysis and statistics}
-
-
+Nipy contains also some tools for linear group statistics: these
+statistics consist in estimating the impact of subjects-related
+information described in a design matrix (such as the age, some
+behavioural score or the membership a group of control or patient
+subject).
+%
+The same API used in the first-level GLM can be used in the second
+glm; moreover, it can take into account the uncertainty on the first
+level effects, yielding the so-called mixed-effects model \cite{Roche2007}.
+%
+Intuitively, such a model plays a useful role at down-weighting
+observations that are estimated with larger uncertainty during the
+first-level GLM.
+%
+The output of such a test is typically a log-likelihood ratio test.
+The significance of such a statistic is hard to assess from the data
+(although it can usually be safely approximated by a Student variable
+with a number of degrees of freedom corresponding to those of the
+second-level model).
+%
+Another possibility is to run a permutation test. No simple mechanism
+has been set up to do so at present in nipy, but this will probably be
+added in the future.
+%
+Note that in some simple cases (one- or two-sample tests) a
+permutation proceudre is easily handled in Numpy.
+%
+More complex models, however, require some caution.
 
 \subsection{Cluster-level analysis}
 

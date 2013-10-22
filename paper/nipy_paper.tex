@@ -16,6 +16,8 @@
 \usepackage{chngcntr}
 \usepackage{algorithmic}
 \usepackage{listings}
+\usepackage{multicol}
+\usepackage{widetext}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
@@ -23,6 +25,24 @@
 \usepackage{rotating}
 
 \graphicspath{{Figures/}}
+
+\lstset{language=python,
+	basicstyle=\ttfamily,
+	extendedchars=true,
+	xleftmargin = 0pt,
+	% rulecolor=\color{black!50},
+        aboveskip = 0.5ex,
+        belowskip = 0.6ex,
+	%escapebegin={\color{green!50!black}},
+	%commentstyle=\slshape\color{green!50!black},
+	%stringstyle=\rmfamily\color{blue},
+	showstringspaces=false,
+	tabsize=2,
+	breaklines=true,
+        morekeywords={{,},=,:},
+        frame=single,xleftmargin=\fboxsep,xrightmargin=-\fboxsep
+    }
+
 
 \makeatletter
 \newfloat{algorithm}{H}{loa}[section]
@@ -216,20 +236,19 @@ the expected responses.
 % 
 In terms of software design, this means that as simple yet flexible
 interface is needed for model specification
-
 %% Provide here a snippet of code and an example
-See for instance
-\begin{lstlisting}
-from nipy.modalities.fmri.design_matrix import make_dmtx
-from nipy.modalities.fmri.experimental_paradigm import EventRelatedParadigm
-# Specify an event-related paradigm
-conditions = ['smile', 'smile', 'listen', 'listen', 'read', 'read']
-onsets = [30, 70, 10, 90, 40, 60]
-paradigm = EventRelatedParadigm(conditions, onsets)
-# provide frametimes and compute the design matrix
-frametimes = numpy.array(range(0, 100))
-X = make_dmtx(frametimes, paradigm, drift_model='polynomial', drift_order=3)
-\end{lstlisting}
+See for instance the listing \ref{dmtx} and the result in Fig. \ref{fig:dmtx}
+
+\lstset{language=Python,caption={Creation of a design matrix with nipy}, label=dmtx}
+\begin{widetext}
+\lstinputlisting{dmtx.py}
+\end{widetext}
+\begin{figure}
+\includegraphics[width=.9\linewidth]{dmtx.png}
+\caption{ Result of listing 1: the design matrix contains columns that
+  contains the ideal reponse to input stimuli and a basis of
+  polynomial function to model temporal drifts.}
+\end{figure}
 
 
 General Linear Model fitting consists then in estimating the brain
@@ -238,7 +257,7 @@ responses associated with the columns of design matrix.
 The fit consists in a weighted least-square fit to estimate the model
 parameters and a variance-covariance matrix parametrized by two
 parameters: the amount of noise variance in the voxel time course and
-the lag-1 autocorrelation of the noise CITE. 
+the lag-1 autocorrelation of the noise \cite{Bullmore1996}. 
 %
 The model and covariance parameters are estimated in an alternate
 optimization scheme.

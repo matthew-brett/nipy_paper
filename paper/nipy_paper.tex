@@ -237,9 +237,11 @@ the expected responses.
 In terms of software design, this means that as simple yet flexible
 interface is needed for model specification
 %% Provide here a snippet of code and an example
-See for instance the listing \ref{dmtx} and the result in Fig. \ref{fig:dmtx}
+See for instance the listing \ref{dmtx} and the result in
+Fig. \ref{fig:dmtx}
 
-\lstset{language=Python,caption={Creation of a design matrix with nipy}, label=dmtx}
+\lstset{language=Python,caption={Creation of a design matrix with
+    nipy}, label=dmtx}
 \begin{widetext}
 \lstinputlisting{dmtx.py}
 \end{widetext}
@@ -320,10 +322,9 @@ added in the future.
 Note that in some simple cases (one- or two-sample tests) a
 permutation proceudre is easily handled in Numpy.
 %
-More complex models, however, require some caution.
+%More complex models, however, require some caution.
 
 \subsection{Cluster-level analysis}
-
 
 
 \subsection{Parcel-based Bayesian analysis}
@@ -371,6 +372,82 @@ artefactual effect of smoothing.
 
 \subsection{Brain Functional landmarks}
 % Bertrand
+
+Besides standard group analysis, that performs a probabilistic
+rejection of the null hypothesis that the cross-subject average signal
+is zero at any position of the brain volume, another possibility
+consists is finding in which region of the brain active spots tend to
+accumulate.
+%
+Such regions can be called \textit{Brain Functional landmarks},
+meaning that they display a pattern of activation that can be found
+reliably in a significant fraction of the population.
+% 
+Identifying such brain functional landmarks entails two operations:
+the first one is to define what an active patterns is in practical
+terms. The second one consists in deriving a model of the distribution
+of theese patterns in the domain of interest.
+
+The definition of active patterns, often colloquially referred to as
+\textit{blobs} can easily be performed by using a variant ofthe
+watershed algorithm on each activation maps, that separates the peaks
+of activation above a certain thresholded, provided that the resulting
+regions are large enough (e.g. 10 voxels at least).
+%
+Note that this is slightly more involved than more traditional
+neuroimaging approaches that merely consider the connected components
+of surpa-threshold regions as structures of interest.
+%
+The corresponding algorithm is illustrated in Fig. \ref{fig:watershed}.
+
+\begin{figure}
+\includegraphics[width=\linewidth]{Figures/blob}
+\caption{Segmentation of the blobs of an image. The regions the input
+  image (left) above a given threshold are separated into blobs
+  (middle). This amounts to deriving a sketchy representation of the
+  input (right) that retains peak values on a flat background.}
+\label{fig:watershed}
+\end{figure}
+
+The most important and difficult part consists in deriving a spatial
+distribution of these blobs, in order to identify in which regions of
+the domain of interest they are found.
+%
+this assumes that the data have already been put in a common coordinate
+system.
+%
+We decided to introduce a class of probabilistic distribution,
+Dirichlet Process Mixture Models, aka infinite Gaussian mixture
+models, that give a lot of flexibility to model distributions of the
+coordinates of active regions across individuals: the shape of the
+modes can be relatively arbitrary, while the unlimited number of nodes
+accounts for deviations from the normality of the model.
+%
+After convergence of the density estimate, the modes can be isolated,
+are taken as a tag of homologous regions acorss individuals.
+%
+However, the model also includes a null component, which is a uniform
+distribution over the domain of interest, that models the occurrence of
+false positives in the initial pattern extraction step.
+%
+The final set of landmarks reflects thus a statistical decision on
+the regions of the domain in which strong effects are observed.
+%
+This approach, somewhat reminicent of recent meta-analysis frameworks,
+has been described in detail in \cite{Thirion2007} and
+\cite{Thirion2010}.
+%
+In particular it has been shown that such landmarks bettern predict
+the occurrence of active regions in left-out subjects that classical
+random- or mixed-efects analysis models.
+
+%\begin{figure}
+%\includegraphics[width=\linewidth]{Figures/landmarks}
+%\caption{}
+%\label{fig:watershed}
+%\end{figure}
+
+
 
 \section{Visualization}
 % Gael or Bertrand

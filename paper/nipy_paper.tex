@@ -377,7 +377,7 @@ Besides standard group analysis, that performs a probabilistic
 rejection of the null hypothesis that the cross-subject average signal
 is zero at any position of the brain volume, another possibility
 consists is finding in which region of the brain active spots tend to
-accumulate.
+be concentrated.
 %
 Such regions can be called \textit{Brain Functional landmarks},
 meaning that they display a pattern of activation that can be found
@@ -440,17 +440,27 @@ has been described in detail in \cite{Thirion2007} and
 In particular it has been shown that such landmarks bettern predict
 the occurrence of active regions in left-out subjects that classical
 random- or mixed-efects analysis models.
+%
+This approach is illustrated in Fig. \ref{fig:landmarks} 
 
-%\begin{figure}
-%\includegraphics[width=\linewidth]{Figures/landmarks}
-%\caption{}
-%\label{fig:watershed}
-%\end{figure}
-
-
+\begin{figure}
+\begin{center}
+\includegraphics[width=\linewidth]{Figures/bsa_inputs.png}
+{\Huge $\Downarrow$}
+\includegraphics[width=\linewidth]{Figures/bsa_results.png}
+\end{center}
+\caption{Illustration of the Functional landmarks approach. (Top) a
+  set of individual activation maps are provided as input to the
+  methods, together with a threshold. (Bottom) The algorithm estimates
+  the spatial distribution of the resulting activation patterns
+  (blobs) and separates them into modes.}
+\label{fig:landmarks}
+\end{figure}
 
 \section{Visualization}
 % Gael or Bertrand
+
+
 
 \section{Conclusion}
 

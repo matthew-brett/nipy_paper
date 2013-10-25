@@ -459,7 +459,50 @@ This approach is illustrated in Fig. \ref{fig:landmarks}
 
 \section{Visualization}
 % Gael or Bertrand
+Non-interactive visualization tools are available in Nipy, based
+aither on Matplotlib or Mayavi libraries.
+%
+These tools are mostly helpers that make it easy to overlay an
+activation image on the T1 image of that subject or on a T1 template
+in MNI space.
+%
+The images can be sliced in any direction and a set of orthographic
+views according to three directions can be obtained.
+%
+An important feature of the proposed approach is that the two images
+overlayed do not need to be sampled with the same field of view or
+resolution: they get resamples internally when needed.
 
+\lstset{
+  language=Python,caption={Vizualization of an activation image}, label=viz}
+
+% \begin{widetext}
+\noindent
+\hspace*{-.5cm}
+\lstinputlisting{viz_short.py}
+% \end{widetext}
+\begin{figure}
+\begin{center}
+\includegraphics[width=\linewidth]{Figures/ortho_view.png}
+\includegraphics[width=\linewidth]{Figures/x_view.png}
+\includegraphics[width=.6\linewidth]{Figures/viz_3d.png}
+\end{center}
+\caption{Visualization of an activation image (top) Result of listing \ref{viz} A brain activation image is
+  overlayed on MNI template, thesholded at z=3; note that the image
+  was dynamically resampled from 3 to 1mm isotropic resolution.
+(middle) the activation is overlayed on the anatomical image of the subject, with a black beckground, and sliced in the sagittal orientation.
+(bottom) A 3D viex obtained with the nipy.labs.viz.plot\_map\_3d module}
+\label{fig:viz}
+\end{figure}
+
+Similary, slices of the images according to the sagittal, coronal or
+axial directions can be obtained.
+
+It is also possible to use 3d view, through on (optional) dependence
+on Mayavi. Note that in that case the activation blobs are overlayed
+on a template.
+%
+The API is as simple as for 2D views.
 
 
 \section{Conclusion}

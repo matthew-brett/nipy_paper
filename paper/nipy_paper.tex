@@ -18,6 +18,7 @@
 \usepackage{listings}
 \usepackage{multicol}
 \usepackage{widetext}
+\usepackage{comment}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 
@@ -90,7 +91,7 @@
 \begin{abstract}
 \noindent
 
-NIPY is a library and application for analysing functional imaging data.   We
+NIPY is a library and application for analyzing functional imaging data.   We
 intended the project to be a project open to anyone who wanted to contribute
 high-quality code.  Our aim is to make it easier for researchers to understand
 the analysis and build their own tools, by writing code that is clear,
@@ -103,7 +104,7 @@ open-source developers, and Python's emphasis on testing and
 documentation.
 
 The package developed from a collaboration between researchers in Stanford,
-Berkeley and CEA Neurospin in France.
+Berkeley and INRIA/CEA, Neurospin in France.
 
 Notable features of the NIPY package are: scriptable image diagnostics
 including flexible PCA; combined slice-timing and movement correction
@@ -118,7 +119,7 @@ We will describe these features of the package with examples of their use.
 
 \section{Keywords:} Python, functional MRI, structural MRI, 
 Deconvolution, Medical imaging, Open source software, Deterministic
-tractography, Probabilistic tractography, Visualisation.
+tractography, Probabilistic tractography, Visualization.
 
 \end{abstract}
 
@@ -193,7 +194,7 @@ either by choosing among pre-defined classes or by plugging external
 classes. Built-in registration measures include mutual information
 \citep{maes:tmi:97}, normalized mutual information
 \citep{studholme:pr:98}, standard correlation and correlation ratio
-measures \citep{roche:ijist:00}. Built-in transfromation sets include
+measures \citep{roche:ijist:00}. Built-in transformation sets include
 rigid, similarity and 12-parameter affine transformations, and we are
 currently developing diffeomorphic nonrigid transformation classes.
 
@@ -214,22 +215,22 @@ represent the expected impact of the experimental events on the brain
 signals, plus a set of confounds.
 %
 Neuroimagers typically have to make a set of choices here: for
-instance, they need to decide which model of the hemodynamic reponse
+instance, they need to decide which model of the hemodynamic response
 function (hrf) they want to use to model evoked response. 
 %
 The hrf is a low-pass filter that delays some input signal --an
-idealized model of neural reponses-- with the observed Blood
+idealized model of neural responses-- with the observed Blood
 Oxygen-Level Dependent (BOLD) contrast.
 %
 Different parametrization of this filter have been proposed in the
 literature \cite{Friston1998,Glover1999}; moreover, it is often
 advised to include the first derivative of the chosen model to account
-for unpredictable delays in the reponse, that can be due to local
+for unpredictable delays in the response, that can be due to local
 vasculature differences, uncertainty on the exact neural response
 timing, or shortcomings of the slice timing correction.
 %
 Similarly, several different parametrizations can be used to model
-signals of no interest, such as low-frequeny drifts.
+signals of no interest, such as low-frequency drifts.
 %
 In practice, it is advised to consider different parametrizations of
 the expected responses.
@@ -250,7 +251,7 @@ Fig. \ref{fig:dmtx}
 \includegraphics[width=.8\linewidth]{dmtx.png}
 \end{center}
 \caption{ Result of listing 1: the design matrix contains columns that
-  contains the ideal reponse to input stimuli and a basis of
+  contains the ideal response to input stimuli and a basis of
   polynomial function to model temporal drifts.}
 \label{fig:dmtx}
 \end{figure}
@@ -271,10 +272,10 @@ The corresponding interface is relatively simple, as the user simply
 needs to provide the design matrix and the data matrix. 
 %
 It yields a class that contains summary statistics (estimated effects
-and their covariance matrix) that can be used for durther
-investiagtion; the standard way of exploiting this output consists in
+and their covariance matrix) that can be used for further
+investigation; the standard way of exploiting this output consists in
 specifying a linear combination of the regressors and test the
-signifiance in signed (t-) or unsigned (F-test)
+significance in signed (t-) or unsigned (F-test)
 %
 The simplicity of the illustrated in listing \ref{glm}.
 
@@ -298,7 +299,7 @@ rate correction.
 Nipy contains also some tools for linear group statistics: these
 statistics consist in estimating the impact of subjects-related
 information described in a design matrix (such as the age, some
-behavioural score or the membership a group of control or patient
+behavioral score or the membership a group of control or patient
 subject).
 %
 The same API used in the first-level GLM can be used in the second
@@ -320,7 +321,7 @@ has been set up to do so at present in nipy, but this will probably be
 added in the future.
 %
 Note that in some simple cases (one- or two-sample tests) a
-permutation proceudre is easily handled in Numpy.
+permutation procedure is easily handled in Numpy.
 %
 %More complex models, however, require some caution.
 
@@ -330,12 +331,12 @@ permutation proceudre is easily handled in Numpy.
 \subsection{Parcel-based Bayesian analysis}
 
 A weakness of conventional mass-univariate group analysis is that it
-relies on averaging unperfectly aligned multi-subject data, thereby
+relies on averaging imperfectly aligned multi-subject data, thereby
 mixing signals from potentially different functional
 areas. Cluster-level inference can be used to mitigate this problem,
-but comes at the price of sacrificied localization power. NIPY
+but comes at the price of sacrificed localization power. NIPY
 implements an alternative group inference method using a hierarchical
-statistical model that explicititly incorporates spatial uncertainty
+statistical model that explicitly incorporates spatial uncertainty
 in the standard space, and performs an approximate Bayesian inference
 on group effects assumed to be piecewise constant within the brain
 according to a given, user-supplied parcellation
@@ -350,7 +351,7 @@ of changing the speaker for different sentences in an auditory fMRI
 experiment from 15 {\em non-smoothed} first-level contrast images. We
 use the AAL atlas \citep{tzourio:ni:02} as the underlying parcellation
 in this example. The method highlights the inferior temporal gyri and
-the left paracentral lobule as the regions with strongest
+the left para-central lobule as the regions with strongest
 effects. Note that it is possible to switch off the localization
 uncertainty model and replace it with conventional image smoothing, as
 shown in the right panel of Figure~\ref{fig:parcel_group}. We then
@@ -386,17 +387,17 @@ reliably in a significant fraction of the population.
 Identifying such brain functional landmarks entails two operations:
 the first one is to define what an active patterns is in practical
 terms. The second one consists in deriving a model of the distribution
-of theese patterns in the domain of interest.
+of these patterns in the domain of interest.
 
 The definition of active patterns, often colloquially referred to as
-\textit{blobs} can easily be performed by using a variant ofthe
+\textit{blobs} can easily be performed by using a variant of the
 watershed algorithm on each activation maps, that separates the peaks
 of activation above a certain thresholded, provided that the resulting
 regions are large enough (e.g. 10 voxels at least).
 %
 Note that this is slightly more involved than more traditional
 neuroimaging approaches that merely consider the connected components
-of surpa-threshold regions as structures of interest.
+of supra-threshold regions as structures of interest.
 %
 The corresponding algorithm is illustrated in Fig. \ref{fig:watershed}.
 
@@ -424,7 +425,7 @@ modes can be relatively arbitrary, while the unlimited number of nodes
 accounts for deviations from the normality of the model.
 %
 After convergence of the density estimate, the modes can be isolated,
-are taken as a tag of homologous regions acorss individuals.
+are taken as a tag of homologous regions across individuals.
 %
 However, the model also includes a null component, which is a uniform
 distribution over the domain of interest, that models the occurrence of
@@ -433,13 +434,13 @@ false positives in the initial pattern extraction step.
 The final set of landmarks reflects thus a statistical decision on
 the regions of the domain in which strong effects are observed.
 %
-This approach, somewhat reminicent of recent meta-analysis frameworks,
+This approach, somewhat reminiscent of recent meta-analysis frameworks,
 has been described in detail in \cite{Thirion2007} and
 \cite{Thirion2010}.
 %
-In particular it has been shown that such landmarks bettern predict
+In particular it has been shown that such landmarks better predict
 the occurrence of active regions in left-out subjects that classical
-random- or mixed-efects analysis models.
+random- or mixed-effects analysis models.
 %
 This approach is illustrated in Fig. \ref{fig:landmarks} 
 
@@ -460,7 +461,7 @@ This approach is illustrated in Fig. \ref{fig:landmarks}
 \section{Visualization}
 % Gael or Bertrand
 Non-interactive visualization tools are available in Nipy, based
-aither on Matplotlib or Mayavi libraries.
+either on Matplotlib or Mayavi libraries.
 %
 These tools are mostly helpers that make it easy to overlay an
 activation image on the T1 image of that subject or on a T1 template
@@ -471,7 +472,11 @@ views according to three directions can be obtained.
 %
 An important feature of the proposed approach is that the two images
 overlayed do not need to be sampled with the same field of view or
-resolution: they get resamples internally when needed.
+resolution: they get resampled internally when needed. 
+%
+This is made possible by providing the affine transform that maps the
+images to some (implicit) reference space: the MNI space or the
+individual anatomical space.
 
 \lstset{
   language=Python,caption={Vizualization of an activation image}, label=viz}
@@ -490,17 +495,17 @@ resolution: they get resamples internally when needed.
 \caption{Visualization of an activation image (top) Result of listing \ref{viz} A brain activation image is
   overlayed on MNI template, thesholded at z=3; note that the image
   was dynamically resampled from 3 to 1mm isotropic resolution.
-(middle) the activation is overlayed on the anatomical image of the subject, with a black beckground, and sliced in the sagittal orientation.
-(bottom) A 3D viex obtained with the nipy.labs.viz.plot\_map\_3d module}
+(middle) the activation is overlayed on the anatomical image of the subject, with a black background, and sliced in the sagittal orientation.
+(bottom) A 3D view obtained with the nipy.labs.viz.plot\_map\_3d module}
 \label{fig:viz}
 \end{figure}
 
-Similary, slices of the images according to the sagittal, coronal or
+Similarly, slices of the images according to the sagittal, coronal or
 axial directions can be obtained.
 
-It is also possible to use 3d view, through on (optional) dependence
-on Mayavi. Note that in that case the activation blobs are overlayed
-on a template.
+It is also possible to obtain 3D views, through an (optional)
+dependence on Mayavi. Note that in that case the activation blobs are
+overlayed on a template.
 %
 The API is as simple as for 2D views.
 
@@ -516,6 +521,7 @@ Is it true that there are no conflicts of interest relating to this
 work?
 
 
+\begin{comment}
 \section*{Formatting stuff}
 
 To be removed later on.
@@ -554,7 +560,7 @@ Comparison & Coverage \% (s.d.) & Overlap (s.d.) \\ \hline
 (0.18)\\ & Random & 95.86 (0.62) & 6.81 (0.93)\\ \hline
 \end{tabular}}{}
 \end{table}
-
+\end{comment}
 
 %%\selectlanguage{british}%
 \bibliographystyle{apalike2}

@@ -542,6 +542,11 @@ individual anatomical space.
 \noindent
 \hspace*{-.5cm}
 \lstinputlisting{viz_short.py}
+
+\lstset{
+  language=Python,caption={3d Vizualization of an activation image}, label=viz_3d}
+\lstinputlisting{viz_3d_short.py}
+
 % \end{widetext}
 \begin{figure}
 \begin{center}
@@ -558,7 +563,10 @@ individual anatomical space.
   activation are then displayed. (middle) the activation is overlayed
   on the anatomical image of the subject, with a black background, and
   sliced in the sagittal orientation.  (bottom) A 3D view obtained
-  with the nipy.labs.viz.plot\_map\_3d module}
+  with the nipy.labs.viz.plot\_map\_3d module, see listing
+  \ref{viz_3d}.  Note that this images used in this script is
+  available from the nipy
+  \url{examples/labs/need_data/get_data_light.py} module.}
 \label{fig:viz}
 \end{figure}
 

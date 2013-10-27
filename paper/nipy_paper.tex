@@ -549,11 +549,16 @@ individual anatomical space.
 \includegraphics[width=\linewidth]{Figures/x_view.png}
 \includegraphics[width=.6\linewidth]{Figures/viz_3d.png}
 \end{center}
-\caption{Visualization of an activation image (top) Result of listing \ref{viz} A brain activation image is
-  overlayed on MNI template, thesholded at z=3; note that the image
-  was dynamically resampled from 3 to 1mm isotropic resolution.
-(middle) the activation is overlayed on the anatomical image of the subject, with a black background, and sliced in the sagittal orientation.
-(bottom) A 3D view obtained with the nipy.labs.viz.plot\_map\_3d module}
+\caption{Visualization of an activation image (top) Result of listing
+  \ref{viz} A brain activation image is overlayed on MNI template,
+  thesholded at z=3; note that the image was dynamically resampled
+  from 3 to 1mm isotropic resolution.  Note that the choice of the
+  slices displayed, defined by MNI corrdinates given in the cut\_locus
+  variable, can be omitted: slices showing the maximal amount of
+  activation are then displayed. (middle) the activation is overlayed
+  on the anatomical image of the subject, with a black background, and
+  sliced in the sagittal orientation.  (bottom) A 3D view obtained
+  with the nipy.labs.viz.plot\_map\_3d module}
 \label{fig:viz}
 \end{figure}
 

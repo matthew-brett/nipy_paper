@@ -242,22 +242,31 @@ state fMRI.
 
 \subsection{Generic image registration}
 
-NIPY has a generic module ({\tt algorithms.registration}) that
-implements the registration of two three-dimensional images as the
-numerical maximization of a registration measure with respect to a
-spatial transformation set. The module is designed to enable the user
-to customize both the registration measure and the transformation set,
+NIPY has a generic {\tt registration} module that implements the
+registration of two three-dimensional images as the numerical
+maximization of a given ``similarity'' measure over a given spatial
+transformation set. The module is designed to enable the user to
+customize both the similarity measure and the transformation set,
 either by choosing among pre-defined classes or by plugging external
-classes. Built-in registration measures include mutual information
+classes. Built-in similarity measures include mutual information
 \citep{maes:tmi:97}, normalized mutual information
-\citep{studholme:pr:98}, standard correlation and correlation ratio
-measures \citep{roche:ijist:00}. Built-in transformation sets include
-rigid, similarity and 12-parameter affine transformations, and we are
-currently developing diffeomorphic nonrigid transformation classes.
+\citep{studholme:pr:98}, Parzen windowing-based variants of mutual
+information \citep{viola:ijcv:97}, as well as standard correlation and
+correlation ratio measures \citep{roche:ijist:00}. Built-in
+transformation sets include rigid, similarity and 12-parameter affine
+transformations, and we are currently developing diffeomorphic
+nonrigid transformation classes.
 
+Listing \ref{registration} provides a fairly customized example of
+affine multimodal registration using NIPY.
 
-
-
+\lstset{language=Python, caption={Affine 3D image
+    registration of an fMRI volume onto a structural T1 volume using
+    a two-pass approach.},
+  label=registration}
+\begin{widetext}
+\lstinputlisting{registration.py}
+\end{widetext}
 
 \section{Statistical analysis}
 
